@@ -6,6 +6,11 @@
 #include <stdlib.h>
 #include "tnode.h"
 
+// stores a freeMethod function pointer in TNODE struct
+typedef void (*FM)(void * ptr);
+// stores a displayMethod function pointer in TNODE struct
+typedef void (*DM)(void * ptr, FILE *fp);
+
 struct tnode {
   void * value;
   int debugVal;

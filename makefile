@@ -1,80 +1,93 @@
 OOPTS = -g -std=c99 -Wall -Wextra -c
 LOPTS = -g -std=c99 -Wall -Wextra
-CDAOBJS = cda.o test-cda3.o integer.o
-QOBJS = queue.o cda.o test-queue.o integer.o
-BSTOBJS = tnode.o bst.o queue.o cda.o bst-0-3.o string.o real.o integer.o
-GSTOBJS = tnode.o bst.o queue.o cda.o gst.o gst-0-4.o integer.o real.o string.o
-RBTOBJS = tnode.o bst.o queue.o cda.o gst.o rbt-0-0.o string.o integer.o real.o rbt.o
-TREESOBJS = tnode.o bst.o gst.o rbt.o cda.o queue.o string.o real.o integer.o scanner.o interpreter.o trees.o
+DAOBJS = da.o da-0-4.o integer.o
+CDAOBJS = cda.o cda-0-0.o integer.o
+QOBJS = queue.o cda.o queue-0-0.o integer.o
+SETOBJS = set.o da.o set-0-2.o integer.o real.o string.o
+BSTOBJS = bst.o queue.o cda.o bst-0-4.o integer.o real.o tnode.o
+RBTOBJS = bst.o queue.o cda.o rbt-0-0.o integer.o real.o rbt.o tnode.o gst.o
+KOBJS = kruskal2.o set.o da.o string.o integer.o scanner.o queue.o cda.o bst.o rbt.o gst.o tnode.o
 
-all : cda queue bst gst rbt trees
+all : da cda queue bst rbt set kruskal
 
+set : $(SETOBJS)
+	gcc $(LOPTS) $(SETOBJS) -o set
+da : $(DAOBJS)
+	gcc $(LOPTS) $(DAOBJS) -o da
 cda : $(CDAOBJS)
 	gcc $(LOPTS) $(CDAOBJS) -o cda
 queue : $(QOBJS)
 	gcc $(LOPTS) $(QOBJS) -o queue
 bst : $(BSTOBJS)
 	gcc $(LOPTS) $(BSTOBJS) -o bst
-gst : $(GSTOBJS)
-	gcc $(LOPTS) $(GSTOBJS) -o gst
 rbt : $(RBTOBJS)
 	gcc $(LOPTS) $(RBTOBJS) -o rbt
-trees : $(TREESOBJS)
-	gcc $(LOPTS) $(TREESOBJS) -o trees
+kruskal : $(KOBJS)
+	gcc $(LOPTS) $(KOBJS) -o kruskal
+
+set.o: set.c set.h
+	gcc $(OOPTS) set.c
 integer.o : integer.c integer.h
 	gcc $(OOPTS) integer.c
 real.o : real.c real.h
 	gcc $(OOPTS) real.c
 string.o : string.c string.h
 	gcc $(OOPTS) string.c
-scanner.o : scanner.c scanner.h
+scanner.o:	scanner.c scanner.h
 	gcc $(OOPTS) scanner.c
+da.o: da.c
+	gcc $(OOPTS) da.c
+tnode.o : tnode.c tnode.h
+	gcc $(OOPTS) tnode.c
 cda.o : cda.c cda.h
 	gcc $(OOPTS) cda.c
 queue.o : queue.c queue.h cda.h
 	gcc $(OOPTS) queue.c
-tnode.o : tnode.c tnode.h
-	gcc $(OOPTS) tnode.c
-interpreter.o : interpreter.c interpreter.h rbt.h gst.h
-	gcc $(OOPTS) interpreter.c
-bst.o : bst.c bst.h tnode.h queue.h
+bst.o : bst.c bst.h queue.h
 	gcc $(OOPTS) bst.c
 gst.o : gst.c gst.h bst.h tnode.h queue.h
 	gcc $(OOPTS) gst.c
-rbt.o : rbt.c rbt.h tnode.h gst.h
+rbt.o : rbt.c rbt.h
 	gcc $(OOPTS) rbt.c
-trees.o : trees.c gst.h rbt.h string.h interpreter.h
-	gcc $(OOPTS) trees.c
-test-cda3.o : test-cda3.c cda.h
-	gcc $(OOPTS) test-cda3.c
-test-queue.o : test-queue.c queue.h cda.h
-	gcc $(OOPTS) test-queue.c
-bst-0-3.o : bst-0-3.c string.h queue.h bst.h integer.h real.h
-	gcc $(OOPTS) bst-0-3.c
-gst-0-4.o : gst-0-4.c integer.h string.h queue.h bst.h real.h
-	gcc $(OOPTS) gst-0-4.c
-rbt-0-0.o : rbt-0-0.c gst.h rbt.h integer.h real.h string.h
+kruskal2.o: kruskal2.c set.h da.h string.h integer.h
+	gcc $(OOPTS) kruskal2.c
+
+
+set-0-2.o : set-0-2.c set.h da.h integer.h real.h string.h
+	gcc $(OOPTS) set-0-2.c
+da-0-4.o : da-0-4.c da.h
+	gcc $(OOPTS) da-0-4.c
+cda-0-0.o : cda-0-0.c cda.h
+	gcc $(OOPTS) cda-0-0.c
+queue-0-0.o : queue-0-0.c queue.h cda.h
+	gcc $(OOPTS) queue-0-0.c
+test-bst.o : test-bst.c integer.h string.h queue.h bst.h real.h
+	gcc $(OOPTS) test-bst.c
+bst-0-4.o : bst-0-4.c integer.h string.h queue.h bst.h real.h
+	gcc $(OOPTS) bst-0-4.c
+rbt-0-0.o : rbt-0-0.c rbt.h integer.h real.h string.h
 	gcc $(OOPTS) rbt-0-0.c
-test : rbt gst bst #trees cda queue
+
+
+test : kruskal #set bst rbt cda queue
 	#./da
 	#./cda
-	#./stack
 	#./queue
-	./bst
-	./gst
-	./rbt
-valgrind : bst gst rbt #trees cda queue
+	#./bst
+	#./rbt
+	#./set
+	./kruskal g-0-0
+	#./kruskal g-0-4
+
+valgrind : set #kruskal bst rbt cda queue
 	#valgrind --leak-check=full ./da
 	#valgrind --leak-check=full ./cda
-	#valgrind --leak-check=full ./stack
 	#valgrind --leak-check=full ./queue
-	valgrind --tool=memcheck --leak-check=yes bst
-	valgrind --tool=memcheck --leak-check=yes gst
-	valgrind --tool=memcheck --leak-check=yes rbt
+	#valgrind --leak-check=full bst
+	#valgrind --leak-check=full rbt
+	valgrind --leak-check=full set
+	valgrind --leak-check=full kruskal
+
 clean :
-	rm -f $(BSTOBJS) $(GSTOBJS) $(RBTOBJS) $(QOBJS) $(CDAOBJS) $(TREESOBJS) \
-	bst gst cda queue rbt trees
-copy :
-	#cp ../objects/bst.o .
-	#cp ../objects/gst.o .
-	cp ../objects/rbt.o .
+	rm -f $(BSTOBJS) $(RBTOBJS) $(QOBJS) $(DAOBJS) $(CDAOBJS) $(KOBJS) $(SETOBJS) \ #$(OKRUSH) $(NKRUSK)  \
+	bst da cda queue rbt set kruskal

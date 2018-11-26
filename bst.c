@@ -10,6 +10,15 @@
 #include "bst.h"
 #include "tnode.h"
 
+// stores a comparator function pointer in BST struct
+typedef int (*CM)(void * one, void * two);
+// stores a displayMethod function pointer in BST struct
+typedef void (*DM)(void * ptr, FILE *fp);
+// stores a swapper function pointer in BST struct
+typedef void (*SM)(TNODE * one, TNODE * two);
+// stores a freeMethod function pointer in BST struct
+typedef void (*FM)(void * ptr);
+
 struct bst {
   TNODE * root;
   int size;
